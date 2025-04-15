@@ -8,6 +8,8 @@ app.secret_key = os.environ.get('SECRET_KEY', os.urandom(24))  # 從環境變數
 
 # 消息狀態文件路徑
 STATUS_FILE = 'message_status.json'
+# 消息內容文件路徑
+MESSAGE_FILE = 'message_content.txt'
 
 # 重置密碼的哈希值 (默認密碼為 'reset123')
 # 在生產環境中應該使用環境變數設置
@@ -29,6 +31,21 @@ def save_status(status):
     with open(STATUS_FILE, 'w') as f:
         json.dump(status, f)
 
+def load_message():
+    """從文件中讀取消息內容"""
+    try:
+        if os.path.exists(MESSAGE_FILE):
+            with open(MESSAGE_FILE, 'r', encoding='utf-8') as f:
+                return f.read()
+        else:
+            default_message = "這是一條自毀消息。閱讀後將不再顯示。"
+            with open(MESSAGE_FILE, 'w', encoding='utf-8') as f:
+                f.write(default_message)
+            return default_message
+    except Exception as e:
+        print(f"讀取消息文件時出錯: {e}")
+        return "這是一條自毀消息。閱讀後將不再顯示。"
+
 @app.route('/', methods=['GET', 'POST'])
 def index():
     status = load_status()
@@ -45,7 +62,8 @@ def index():
     if status['read']:
         return render_template('empty.html')
     else:
-        return render_template('message.html', message="這是一條自毁消息。閱讀後將不再顯示。")
+        message = load_message()
+        return render_template('message.html', message=message)
 
 @app.route('/reset', methods=['GET', 'POST'])
 def reset():
