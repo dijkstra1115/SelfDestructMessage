@@ -1,9 +1,9 @@
-from flask import Flask, render_template, request, redirect, url_for, session, flash
+from flask import Flask, render_template, request, redirect, url_for, session, flash, send_from_directory
 import os
 import json
 import hashlib
 
-app = Flask(__name__)
+app = Flask(__name__, static_folder='static', static_url_path='/static')
 app.secret_key = os.environ.get('SECRET_KEY', os.urandom(24))  # 從環境變數獲取密鑰或生成隨機密鑰
 
 # 消息狀態文件路徑
@@ -82,6 +82,12 @@ def reset():
             return render_template('reset.html', error="密碼錯誤")
     
     return render_template('reset.html')
+
+@app.route('/favicon.ico')
+def favicon():
+    """提供站點圖標"""
+    return send_from_directory(os.path.join(app.root_path, 'static'),
+                               'favicon.ico', mimetype='image/vnd.microsoft.icon')
 
 if __name__ == '__main__':
     # 在本地開發使用

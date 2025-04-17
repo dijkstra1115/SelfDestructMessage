@@ -1,0 +1,65 @@
+/* 紙張樣式 */
+.paper {
+    width: 200px;
+    height: 200px;
+    background-color: #f0f0f0;
+    border-radius: 5px;
+    position: relative;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
+}
+
+.paper:before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 10px;
+    right: 10px;
+    height: 100%;
+    background: repeating-linear-gradient(
+        #f0f0f0,
+        #f0f0f0 24px,
+        #ddd 25px
+    );
+}
+
+.paper-corner {
+    position: absolute;
+    width: 30px;
+    height: 30px;
+    background-color: #e0e0e0;
+    top: 0;
+    right: 0;
+    transform: rotate(0deg);
+    transform-origin: bottom left;
+    clip-path: polygon(100% 0, 0 0, 100% 100%);
+}
+
+/* 燃燒效果 */
+@keyframes burn {
+    0% {
+        filter: none;
+        transform: scale(1);
+        opacity: 1;
+    }
+    40% {
+        filter: sepia(50%) brightness(90%);
+        transform: scale(0.98);
+        opacity: 0.9;
+    }
+    60% {
+        filter: sepia(80%) brightness(60%) contrast(150%);
+        transform: scale(0.95);
+        opacity: 0.7;
+    }
+    80% {
+        filter: sepia(100%) brightness(30%) contrast(200%);
+        transform: scale(0.9);
+        opacity: 0.5;
+    }
+    100% {
+        filter: sepia(100%) brightness(10%) contrast(300%);
+        transform: scale(0.85);
+        opacity: 0.3;
+    }
+} 
